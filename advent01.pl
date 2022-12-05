@@ -14,10 +14,13 @@ sub sumCalories {
 	return $sum
 }
 
-my ($elf, $max, $txt) = (0, 0, "There are no elves.");
-for ( split("\n\n", $snackList) ) {
-	$elf++;
-	my $cals = sumCalories($_);
-	($max, $txt) = ($cals, "Elf $elf carries the biggest pack with $cals calories") if $cals >= $max 
+my $elf = 0;
+my @packList = map{ [ ++$elf, sumCalories($_) ] } split("\n\n", $snackList);
+my @elfPacks = sort {$b->[1] <=> $a->[1]} @packList;
+
+print $elfPacks[0]->[1]."\n";
+my $sum = 0;
+for(0 .. 2) {
+	$sum += $elfPacks[$_]->[1];
 }
-print $txt
+print $sum;
