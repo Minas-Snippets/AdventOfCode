@@ -1,19 +1,12 @@
 #!/usr/bin/perl
 
-my $snackList = "1000
-2000
-3000
+my $snackList;
 
-4000
-
-5000
-6000
-
-7000
-8000
-9000
-
-10000";
+open(my $f, "<", "puzzle1.txt");
+while(<$f>) {
+	$snackList .= $_
+}
+close($f);
 
 sub sumCalories {
 	my $sum = 0;
