@@ -23,8 +23,8 @@ while(<>) { # call with "./advent12.pl inputfile"
         $c or push(@l,$i);
         push(@a,$c);
     }
-    $m++;
 }
+$m++;
 
 for my $i ( 0 .. $m-1 ) {
     for my $j ( 0 .. $n-1 ) {
