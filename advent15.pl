@@ -7,7 +7,8 @@ my(@sensors, %beacons);
 
 while(<>) {
     m/[^x]*x=(-?\d+), y=(-?\d+)[^x]*x=(-?\d+), y=(-?\d+)/ or next;
-    $beacons{"$3,$4"} = 1;
+    $beacons{$4} //= { };
+    $beacons{$4}->{$3} = 1;
     push(@sensors,[$1,$2,abs($1-$3) + abs($2-$4)]);
 }
 
@@ -20,7 +21,7 @@ for(@sensors) {
     my $v = abs($y - $j);
     next if $v > $d;
     my ($a,$b) = ($i-$d+$v,$i+$d-$v);
-    unless(@unions || $a > $unions[-1]->[1]) {
+    if(!@unions || $a > $unions[-1]->[1]) {
         push(@unions,[$a,$b]);
         next
     }
@@ -63,8 +64,10 @@ for(@sensors) {
     }
 }
 my $n = 0;
-for(@unions) {
-    $beacons{"$_,$y"} or $n++ for $_->[0] .. $_->[1]
+my @yBeacons = keys %{$beacons{$y}}; 
+for my $u (@unions) {
+    $n += ($u->[1] - $u->[0] + 1);
+    $n -= ($_ <= $u->[1] && $_ >= $u->[0] ? 1 : 0) for @yBeacons
 }
 say $n;
 
